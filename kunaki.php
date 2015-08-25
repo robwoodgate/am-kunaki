@@ -21,7 +21,7 @@ class Am_Plugin_Kunaki extends Am_Plugin
 {
 
     const PLUGIN_STATUS = self::STATUS_PRODUCTION;
-    const PLUGIN_REVISION = '1.5';
+    const PLUGIN_REVISION = '1.6';
     const KUNAKI_URL = 'http://kunaki.com/XMLService.ASP';
     const KUNAKI_SHIPPED = 'kunaki-shipped';
     const KUNAKI_PRODUCTS = 'kunaki-products';

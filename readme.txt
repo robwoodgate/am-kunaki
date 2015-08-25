@@ -1,4 +1,4 @@
-Kunaki Plugin v1.5
+Kunaki Plugin v1.6
 Copyright 2012 (c) R Woodgate, Cogmentis Ltd
 http://www.cogmentis.com/kunaki-plugin-for-amember-v4/
 All Rights Reserved
