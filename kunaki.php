@@ -1,12 +1,13 @@
 <?php
 /**
- *  Kunaki v1.5
+ *  Kunaki v1.6
  *  Copyright 2012-2015 (c) R Woodgate
  *  All Rights Reserved
  *
  * ============================================================================
  * Revision History:
  * ----------------
+ * 2015-08-25   v1.6    R Woodgate  Fixed inventory bug
  * 2015-01-21	v1.5	R Woodgate	Added option to always use latest billing plan
  * 2014-07-11	v1.4	R Woodgate	Fixed inventory messaging bug
  * 2013-07-08	v1.3	R Woodgate	Package count bugfix for free products
@@ -637,7 +638,7 @@ CUT;
         return $inventory;
     }
 
-    protected function setInventory($shipped_array)
+    protected function setInventory($inventory)
     {
         if ($this->getConfig('testmode')) $this->getDi()->errorLogTable->log('Kunaki: Setting inventory: '.  print_r($inventory,1));
         $this->getDi()->store->setBlob(self::KUNAKI_INVENTORY, serialize($inventory));
