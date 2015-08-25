@@ -82,6 +82,7 @@ class Am_Plugin_Kunaki extends Am_Plugin
         $form->setDefault('adminemail', $this->getDi()->config->get('admin_email'));
 
         $form->addFieldsPrefix('misc.kunaki.');
+        $this->_afterInitSetupForm($form);
         $event->addForm($form);
     }
 
@@ -313,9 +314,7 @@ This file may not be distributed unless permission is given by author.
 This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING
 WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-For support (to report bugs and request new features) visit:
-
-<a href="http://www.cogmentis.com/">http://www.cogmentis.com/</a>
+For support (to report bugs and request new features) visit: <a href="http://www.cogmentis.com/">www.cogmentis.com/</a>
 
 -------------------------------------------------------------------------------'
 CUT;
