@@ -89,7 +89,6 @@ class Am_Plugin_Kunaki extends Am_Plugin
     function onValidateSavedForm(Am_Event_ValidateSavedForm $event){
         $form = $event->getForm();
         $request = $form->getRawValue();
-		if ($this->getConfig('testmode')) $event->getDi()->errorLogTable->log("Kunaki: Validating request = ".print_r($request,1));
 
         // Iterate form to see if any kunaki products being ordered
 		// Based on lib/Am/SignupController logic
@@ -111,6 +110,9 @@ class Am_Plugin_Kunaki extends Am_Plugin
 		// If not, exit
 		if (count($kunaki_products) == 0)
 			return; // not a kunaki order
+
+        // Log request?
+        if ($this->getConfig('testmode')) $event->getDi()->errorLogTable->log("Kunaki: Validating request = ".print_r($request,1));
 
         // Validate order country
         if($request['country'] && !$this->kunakiCheckCountry($request['country']))
