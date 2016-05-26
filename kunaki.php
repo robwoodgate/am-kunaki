@@ -8,12 +8,12 @@
  * Revision History:
  * ----------------
  * 2015-08-25   v1.6    R Woodgate  Fixed inventory bug
- * 2015-01-21	v1.5	R Woodgate	Added option to always use latest billing plan
- * 2014-07-11	v1.4	R Woodgate	Fixed inventory messaging bug
- * 2013-07-08	v1.3	R Woodgate	Package count bugfix for free products
- * 2013-06-19	v1.2	R Woodgate	Updated validation for aMember v4.2.17+
- * 2013-01-07	v1.1	R Woodgate	Added quantity support and inventory
- * 2012-05-18	v1.0	R Woodgate	Plugin Created
+ * 2015-01-21   v1.5    R Woodgate  Added option to always use latest billing plan
+ * 2014-07-11   v1.4    R Woodgate  Fixed inventory messaging bug
+ * 2013-07-08   v1.3    R Woodgate  Package count bugfix for free products
+ * 2013-06-19   v1.2    R Woodgate  Updated validation for aMember v4.2.17+
+ * 2013-01-07   v1.1    R Woodgate  Added quantity support and inventory
+ * 2012-05-18   v1.0    R Woodgate  Plugin Created
  * ============================================================================
  **/
 
@@ -26,7 +26,7 @@ class Am_Plugin_Kunaki extends Am_Plugin
     const KUNAKI_SHIPPED = 'kunaki-shipped';
     const KUNAKI_PRODUCTS = 'kunaki-products';
     const KUNAKI_ALWAYS_SHIP = 'kunaki-always-ship';
-	const KUNAKI_ALWAYS_FRESH = 'kunaki-always-fresh';
+    const KUNAKI_ALWAYS_FRESH = 'kunaki-always-fresh';
     const KUNAKI_INVENTORY = 'kunaki-inventory';
 
     public function init()
@@ -91,9 +91,9 @@ class Am_Plugin_Kunaki extends Am_Plugin
         $request = $form->getRawValue();
 
         // Iterate form to see if any kunaki products being ordered
-		// Based on lib/Am/SignupController logic
+        // Based on lib/Am/SignupController logic
         $kunaki_products = array();
-		foreach ($request as $k => $v)
+        foreach ($request as $k => $v)
             if (strpos($k, 'product_id')===0)
                 foreach ((array)$request[$k] as $product_id)
                 {
@@ -102,14 +102,14 @@ class Am_Plugin_Kunaki extends Am_Plugin
                     if (!$product_id) continue;
                     $p = $event->getDi()->productTable->load($product_id);
                     if ($plan_id > 0) $p->setBillingPlan(intval($plan_id));
-					$plan_data = $p->getBillingPlanData();
-					if (strlen(trim($plan_data[self::KUNAKI_PRODUCTS])) > 0)
-	                $kunaki_products[] = $p->title;
+                    $plan_data = $p->getBillingPlanData();
+                    if (strlen(trim($plan_data[self::KUNAKI_PRODUCTS])) > 0)
+                    $kunaki_products[] = $p->title;
                 }
 
-		// If not, exit
-		if (count($kunaki_products) == 0)
-			return; // not a kunaki order
+        // If not, exit
+        if (count($kunaki_products) == 0)
+            return; // not a kunaki order
 
         // Log request?
         if ($this->getConfig('testmode')) $event->getDi()->errorLogTable->log("Kunaki: Validating request = ".print_r($request,1));
@@ -290,10 +290,10 @@ These instructions assume you have created your products at Kunaki already.
 
     d. <strong>Kunaki Always Fresh</strong> -
        Normally, aMember takes a snapshot of the billing plan data at time of inital order, and
-	   uses this data for all rebills. This means that if you change your Kunaki Product List,
-	   the change will only affect new orders. Ticking the 'Always Fresh' box on a product
-	   will force the currently set Kunaki Product List to be used for all customers  - useful
-	   for DVD of the month type products where the Kunaki Product List is added to over time.
+       uses this data for all rebills. This means that if you change your Kunaki Product List,
+       the change will only affect new orders. Ticking the 'Always Fresh' box on a product
+       will force the currently set Kunaki Product List to be used for all customers  - useful
+       for DVD of the month type products where the Kunaki Product List is added to over time.
 
     e. Save product settings.
 
@@ -347,20 +347,20 @@ CUT;
         $itemstoship = null;
         foreach ($invoice->getItems() as $invoice_item) {
 
-			// Use original or latest billing plan?
-			$p = $this->getDi()->productTable->load( intval($invoice_item->item_id) );
-			$p->setBillingPlan( intval($invoice_item->billing_plan_id) );
-			$plan_data = $p->getBillingPlanData();
-			if ( !empty($plan_data[self::KUNAKI_ALWAYS_FRESH]) ) {
-				$kunaki_products = ( isset($plan_data[self::KUNAKI_PRODUCTS]) ) ? trim($plan_data[self::KUNAKI_PRODUCTS]) : false;
-				$kunaki_always_ship = ( isset($plan_data[self::KUNAKI_ALWAYS_SHIP]) ) ? true : false;
-			} else {
-				$kunaki_products = trim($invoice_item->getBillingPlanData(self::KUNAKI_PRODUCTS));
-				$kunaki_always_ship = $invoice_item->getBillingPlanData(self::KUNAKI_ALWAYS_SHIP);
-			}
+            // Use original or latest billing plan?
+            $p = $this->getDi()->productTable->load( intval($invoice_item->item_id) );
+            $p->setBillingPlan( intval($invoice_item->billing_plan_id) );
+            $plan_data = $p->getBillingPlanData();
+            if ( !empty($plan_data[self::KUNAKI_ALWAYS_FRESH]) ) {
+                $kunaki_products = ( isset($plan_data[self::KUNAKI_PRODUCTS]) ) ? trim($plan_data[self::KUNAKI_PRODUCTS]) : false;
+                $kunaki_always_ship = ( isset($plan_data[self::KUNAKI_ALWAYS_SHIP]) ) ? true : false;
+            } else {
+                $kunaki_products = trim($invoice_item->getBillingPlanData(self::KUNAKI_PRODUCTS));
+                $kunaki_always_ship = $invoice_item->getBillingPlanData(self::KUNAKI_ALWAYS_SHIP);
+            }
 
 
-			// Skip product if no Kunaki items found
+            // Skip product if no Kunaki items found
             if (!$kunaki_products) {
                 continue;
             }
@@ -570,7 +570,7 @@ CUT;
         $user->data()->update();
     }
 
-	protected function kunakiCheckCountry($country)
+    protected function kunakiCheckCountry($country)
     {
         if (!$country) {
             return;
