@@ -1,12 +1,13 @@
 <?php
 /**
- *  Kunaki v1.6
+ *  Kunaki v1.7
  *  Copyright 2012-2015 (c) R Woodgate
  *  All Rights Reserved
  *
  * ============================================================================
  * Revision History:
  * ----------------
+ * 2018-01-29   v1.7    R Woodgate  Fixed [] operator not supported for strings bug
  * 2015-08-25   v1.6    R Woodgate  Fixed inventory bug
  * 2015-01-21   v1.5    R Woodgate  Added option to always use latest billing plan
  * 2014-07-11   v1.4    R Woodgate  Fixed inventory messaging bug
@@ -21,7 +22,7 @@ class Am_Plugin_Kunaki extends Am_Plugin
 {
 
     const PLUGIN_STATUS = self::STATUS_PRODUCTION;
-    const PLUGIN_REVISION = '1.6';
+    const PLUGIN_REVISION = '1.7';
     const KUNAKI_URL = 'http://kunaki.com/XMLService.ASP';
     const KUNAKI_SHIPPED = 'kunaki-shipped';
     const KUNAKI_PRODUCTS = 'kunaki-products';
@@ -333,13 +334,11 @@ CUT;
 
         // Get array of the Kunaki products already shipped to customer...
         $shipped = trim($user->data()->get(self::KUNAKI_SHIPPED));
-        if ($shipped) {
-            $shipped = explode(',', $shipped);
+        $shipped = explode(',', $shipped);
 
-            // trim white space...
-            foreach ($shipped as $key => $value) {
-                $shipped[$key] = trim($value);
-            }
+        // trim white space...
+        foreach ($shipped as $key => $value) {
+            $shipped[$key] = trim($value);
         }
 
         // Loop through products being ordered this time ...
