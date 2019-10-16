@@ -1,12 +1,13 @@
 <?php
 /**
- *  Kunaki v1.7
- *  Copyright 2012-2015 (c) R Woodgate
+ *  Kunaki v1.8
+ *  Copyright 2012-2019 (c) R Woodgate
  *  All Rights Reserved
  *
  * ============================================================================
  * Revision History:
  * ----------------
+ * 2019-10-16   v1.8    R Woodgate  Moved debug messages to new debug log
  * 2018-01-29   v1.7    R Woodgate  Fixed [] operator not supported for strings bug
  * 2015-08-25   v1.6    R Woodgate  Fixed inventory bug
  * 2015-01-21   v1.5    R Woodgate  Added option to always use latest billing plan
@@ -22,7 +23,7 @@ class Am_Plugin_Kunaki extends Am_Plugin
 {
 
     const PLUGIN_STATUS = self::STATUS_PRODUCTION;
-    const PLUGIN_REVISION = '1.7';
+    const PLUGIN_REVISION = '1.8';
     const KUNAKI_URL = 'http://kunaki.com/XMLService.ASP';
     const KUNAKI_SHIPPED = 'kunaki-shipped';
     const KUNAKI_PRODUCTS = 'kunaki-products';
@@ -67,7 +68,7 @@ class Am_Plugin_Kunaki extends Am_Plugin
         $form = new Am_Form_Setup('kunaki');
         $form->setTitle("Kunaki");
 
-        $fs = $form->addFieldset()->setLabel(___('Kunaki Account <img src="http://www.cogmentis.com/lcimg/kunaki.jpg" />'));
+        $fs = $form->addFieldset()->setLabel(___('Kunaki Account <img src="https://www.cogmentis.com/lcimg/kunaki.jpg" />'));
         $fs->addText('userid')->setLabel(___('Kunaki User ID'));
         $fs->addText('password', array('size' => 40))->setLabel(___('Kunaki Password'));
 
@@ -113,7 +114,7 @@ class Am_Plugin_Kunaki extends Am_Plugin
             return; // not a kunaki order
 
         // Log request?
-        if ($this->getConfig('testmode')) $event->getDi()->errorLogTable->log("Kunaki: Validating request = ".print_r($request,1));
+        if ($this->getConfig('testmode')) $this->logDebug("Kunaki: Validating request = ".print_r($request,1));
 
         // Validate order country
         if($request['country'] && !$this->kunakiCheckCountry($request['country']))
@@ -142,7 +143,7 @@ class Am_Plugin_Kunaki extends Am_Plugin
     // called ONCE per invoice - when first payment received or on free signup
     function onInvoiceStarted(Am_Event $event)
     {
-        //$this->getDi()->errorLogTable->log('kunaki: called onInvoiceStarted');
+        //$this->logDebug('kunaki: called onInvoiceStarted');
         $this->kunakiShipOrder($event);
         return;
     }
@@ -150,7 +151,7 @@ class Am_Plugin_Kunaki extends Am_Plugin
     // called each payment - including recurring. NB: not free signup
     function onPaymentAfterInsert(Am_Event_PaymentAfterInsert $event)
     {
-        //$this->getDi()->errorLogTable->log('kunaki: called onPaymentAfterInsert');
+        //$this->logDebug('kunaki: called onPaymentAfterInsert');
         // Only process here if a recurring payment. First payment handled by onInvoiceStarted
         if ($event->getInvoice()->getPaymentsCount() == 1) return;
         $this->kunakiShipOrder($event);
@@ -245,7 +246,7 @@ These instructions assume you have created your products at Kunaki already.
 
 
     e. <strong>Debug Mode</strong> -
-       Setting this option will cause debug messages to be written to the error log,
+       Setting this option will cause debug messages to be written to the log,
        in addition to regular error messages. Leaving it off will result in only
        error messages being written to the log.
 
@@ -317,7 +318,7 @@ This file may not be distributed unless permission is given by author.
 This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING
 WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-For support (to report bugs and request new features) visit: <a href="http://www.cogmentis.com/">www.cogmentis.com/</a>
+For support (to report bugs and request new features) visit: <a href="https://www.cogmentis.com/">www.cogmentis.com/</a>
 
 -------------------------------------------------------------------------------'
 CUT;
@@ -376,7 +377,7 @@ CUT;
 
             // Work out which Kunaki product package to ship next...
             $payment_count = ($invoice->getPaymentsCount() > 0) ? $invoice->getPaymentsCount() - 1 : 0;
-            if ($testmode) $this->getDi()->errorLogTable->log("Kunaki: Examining package at array index: $payment_count in product: " . $invoice->getLineDescription());
+            if ($testmode) $this->logDebug("Kunaki: Examining package at array index: $payment_count in product: " . $invoice->getLineDescription());
             $items = array_filter(explode(':', $kunaki_products[$payment_count]));
             foreach ($items as $item) {
                 $item = trim($item); // trim spaces
@@ -385,7 +386,7 @@ CUT;
                 if (!in_array($item, (array)$shipped) || $kunaki_always_ship) {
                     $itemstoship[] = array($item, $invoice_item->qty);
                     if ($testmode)
-                        $this->getDi()->errorLogTable->log("Kunaki: Going to ship '$item' (x {$invoice_item->qty}) in product : " . $invoice->getLineDescription());
+                        $this->logDebug("Kunaki: Going to ship '$item' (x {$invoice_item->qty}) in product : " . $invoice->getLineDescription());
                 }
             }
         }
@@ -402,12 +403,12 @@ CUT;
         $country = $invoice->getCountry();
         $countryname = $this->kunakiCheckCountry($country);
         if ($testmode)
-            $this->getDi()->errorLogTable->log("Kunaki: Country Name = $countryname, Country = $country");
+            $this->logDebug("Kunaki: Country Name = $countryname, Country = $country");
 
         // Throw admin warning if we have nothing left to ship
         if (!$itemstoship) {
 
-            $this->getDi()->errorLogTable->log("Kunaki: Nothing available to ship to $customer_name (id:" . $invoice->user_id . ") in: " . $invoice->getLineDescription());
+            $this->logDebug("Kunaki: Nothing available to ship to $customer_name (id:" . $invoice->user_id . ") in: " . $invoice->getLineDescription());
             $subject = 'Kunaki: Nothing available to ship to ' . $customer_name . 'in: ' . $invoice->getLineDescription();
             $msg = "You have just received a recurring payment from $customer_name "
                     . "(id:{$invoice->user_id}) but you have no Kunaki products left "
@@ -430,7 +431,7 @@ CUT;
         }
         $xml_shipping .= '</ShippingOptions>';
         if ($testmode)
-            $this->getDi()->errorLogTable->log("Kunaki: XML Shipping request: $xml_shipping");
+            $this->logDebug("Kunaki: XML Shipping request: $xml_shipping");
 
         // Send Shipping options request
         $http = new Am_HttpRequest(self::KUNAKI_URL);
@@ -460,7 +461,7 @@ CUT;
         // Parse XML response
         $response = str_replace(array('<HTML>', '<BODY>'), '', $response);
         if ($testmode)
-            $this->getDi()->errorLogTable->log("Kunaki: XML Shipping response: " . var_export($response, 1));
+            $this->logDebug("Kunaki: XML Shipping response: " . var_export($response, 1));
         $shipping = new SimpleXMLElement($response);
 
         // See if Kunaki returned an error
@@ -481,12 +482,12 @@ CUT;
             $shipping_options[(string) $option->Description] = (string) $option->Price;
         }
         if ($testmode)
-            $this->getDi()->errorLogTable->log("Kunaki: Shipping Options (unsorted): " . print_r($shipping_options, 1));
+            $this->logDebug("Kunaki: Shipping Options (unsorted): " . print_r($shipping_options, 1));
         asort($shipping_options, SORT_NUMERIC);
         $cheapest = array_keys(array_slice($shipping_options, 0, 1));
         $cheapest = $cheapest[0];
         if ($testmode)
-            $this->getDi()->errorLogTable->log("Kunaki: Max shipping rate: $maxshipping, Cheapest Shipping Option: $cheapest, Cost: " . $shipping_options[$cheapest]);
+            $this->logDebug("Kunaki: Max shipping rate: $maxshipping, Cheapest Shipping Option: $cheapest, Cost: " . $shipping_options[$cheapest]);
 
         // Kill order if shipping is too expensive
         if ($maxshipping > 0 && $shipping_options[$cheapest] > $maxshipping) {
@@ -512,7 +513,7 @@ CUT;
         }
         $xml_order .= '</Order>';
         if ($testmode)
-            $this->getDi()->errorLogTable->log("Kunaki: XML Order request: $xml_order");
+            $this->logDebug("Kunaki: XML Order request: $xml_order");
 
         // Finally, send order
         $http = new Am_HttpRequest(self::KUNAKI_URL);
@@ -542,7 +543,7 @@ CUT;
         // Parse XML
         $response = str_replace(array('<HTML>', '<BODY>'), '', $response);
         if ($testmode)
-            $this->getDi()->errorLogTable->log("Kunaki: XML Order response: " . print_r($response, 1));
+            $this->logDebug("Kunaki: XML Order response: " . print_r($response, 1));
         $order = new SimpleXMLElement($response);
 
         // See if Kunaki returned an error
@@ -634,13 +635,13 @@ CUT;
     {
         $inventory = $this->getDi()->store->getBlob(self::KUNAKI_INVENTORY);
         $inventory = @unserialize($inventory) ? unserialize($inventory) : array();
-        if ($this->getConfig('testmode')) $this->getDi()->errorLogTable->log('Kunaki: Get inventory: '.  print_r($inventory,1));
+        if ($this->getConfig('testmode')) $this->logDebug('Kunaki: Get inventory: '.  print_r($inventory,1));
         return $inventory;
     }
 
     protected function setInventory($inventory)
     {
-        if ($this->getConfig('testmode')) $this->getDi()->errorLogTable->log('Kunaki: Setting inventory: '.  print_r($inventory,1));
+        if ($this->getConfig('testmode')) $this->logDebug('Kunaki: Setting inventory: '.  print_r($inventory,1));
         $this->getDi()->store->setBlob(self::KUNAKI_INVENTORY, serialize($inventory));
     }
 }

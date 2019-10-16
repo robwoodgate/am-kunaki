@@ -1,6 +1,6 @@
 Kunaki Plugin
-Copyright 2012 (c) R Woodgate, Cogmentis Ltd
-http://www.cogmentis.com/kunaki-plugin-for-amember-v4/
+Copyright 2012-2019 (c) R Woodgate, Cogmentis Ltd
+https://www.cogmentis.com/kunaki-plugin-for-amember-v4/
 All Rights Reserved
 
 REQUIREMENTS:
