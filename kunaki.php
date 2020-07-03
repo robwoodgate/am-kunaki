@@ -1,13 +1,13 @@
 <?php
 /**
- *  Kunaki v1.9
+ *  Kunaki v2.0
  *  Copyright 2012-2020 (c) R Woodgate
  *  All Rights Reserved
  *
  * ============================================================================
  * Revision History:
  * ----------------
- * 2020-01-21   v1.9    R Woodgate  aMember v6 update (fixes email)
+ * 2020-01-21   v2.0    R Woodgate  aMember v6 update (fixes email)
  * 2019-10-16   v1.8    R Woodgate  Moved debug messages to new debug log
  * 2018-01-29   v1.7    R Woodgate  Fixed [] operator not supported for strings bug
  * 2015-08-25   v1.6    R Woodgate  Fixed inventory bug
@@ -23,7 +23,7 @@
 class Am_Plugin_Kunaki extends Am_Plugin
 {
     const PLUGIN_STATUS = self::STATUS_PRODUCTION;
-    const PLUGIN_REVISION = '1.9';
+    const PLUGIN_REVISION = '2.0';
     const KUNAKI_URL = 'http://kunaki.com/XMLService.ASP';
     const KUNAKI_SHIPPED = 'kunaki-shipped';
     const KUNAKI_PRODUCTS = 'kunaki-products';

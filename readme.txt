@@ -1,10 +1,10 @@
 Kunaki Plugin
 Copyright 2012-2020 (c) R Woodgate, Cogmentis Ltd
-https://www.cogmentis.com/kunaki-plugin-for-amember-v4/
+https://www.cogmentis.com/kunaki-plugin-for-amember/
 All Rights Reserved
 
 REQUIREMENTS:
-This plugin requires aMember v4.1.17 or higher
+This plugin requires aMember v6.1 or higher and PHP 7.2 or higher
 
 INSTALLATION:
 1. Simply place this kunaki folder and files into the  /application/default/plugins/misc folder of your aMember 4 installation.
