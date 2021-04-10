@@ -1,12 +1,13 @@
 <?php
 /**
- *  Kunaki v2.0
+ *  Kunaki v2.1
  *  Copyright 2012-2020 (c) R Woodgate
  *  All Rights Reserved
  *
  * ============================================================================
  * Revision History:
  * ----------------
+ * 2021-03-10   v2.1    R Woodgate  Use DI->mail so defaults are populated
  * 2020-01-21   v2.0    R Woodgate  aMember v6 update (fixes email)
  * 2019-10-16   v1.8    R Woodgate  Moved debug messages to new debug log
  * 2018-01-29   v1.7    R Woodgate  Fixed [] operator not supported for strings bug
@@ -23,7 +24,7 @@
 class Am_Plugin_Kunaki extends Am_Plugin
 {
     const PLUGIN_STATUS = self::STATUS_PRODUCTION;
-    const PLUGIN_REVISION = '2.0';
+    const PLUGIN_REVISION = '2.1';
     const KUNAKI_URL = 'http://kunaki.com/XMLService.ASP';
     const KUNAKI_SHIPPED = 'kunaki-shipped';
     const KUNAKI_PRODUCTS = 'kunaki-products';
@@ -337,7 +338,7 @@ These instructions assume you have created your products at Kunaki already.
 
 -------------------------------------------------------------------------------
 
-Copyright 2012-2020 (c) Rob Woodgate, Cogmentis Ltd. All Rights Reserved
+Copyright 2012-2021 (c) Rob Woodgate, Cogmentis Ltd. All Rights Reserved
 
 This file may not be distributed unless permission is given by author.
 
@@ -641,7 +642,7 @@ CUT;
                     $this->getConfig('adminemail') :
                     $this->getDi()->config->get('admin_email');
 
-            $m = new Am_Mail;
+            $m = $this->getDi()->mail;
             $m->addTo($adminemail, 'Kunaki Plugin Administrator')
                     ->setSubject($subject)
                     ->setBodyText($message);
