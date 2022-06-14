@@ -1,7 +1,7 @@
 <?php
 /**
  *  Kunaki v2.2
- *  Copyright 2012-2020 (c) R Woodgate
+ *  Copyright 2012-2022 (c) R Woodgate
  *  All Rights Reserved
  *
  * ============================================================================
@@ -345,7 +345,7 @@ These instructions assume you have created your products at Kunaki already.
 
 -------------------------------------------------------------------------------
 
-Copyright 2012-2021 (c) Rob Woodgate, Cogmentis Ltd. All Rights Reserved
+Copyright 2012-2022 (c) Rob Woodgate, Cogmentis Ltd. All Rights Reserved
 
 This file may not be distributed unless permission is given by author.
 
