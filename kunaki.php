@@ -87,7 +87,7 @@ class Am_Plugin_Kunaki extends Am_Plugin
         $fs->addText('password', ['size' => 40])->setLabel(___('Kunaki Password'));
 
         $fs = $form->addFieldset()->setLabel(___('Features'));
-        $fs->addAdvCheckbox('debug')->setLabel(___("Debug Messages?\n".'If ticked, debug messages will be written to the aMember Debug Log'));
+        $fs->addAdvCheckbox('debug')->setLabel(sprintf(___("Debug Messages?\n".'Messages will be written to the %sDebug log%s'), '<a href="'.$this->getDi()->url('default/admin-logs/p/debuglog').'">', '</a>'));
         $fs->addAdvCheckbox('noship')->setLabel(___('Do Not Ship Products'));
         $fs->addText('maxshipping', ['size' => 5])->setLabel(___('Max Shipping Cost'));
         $fs->addAdvCheckbox('checkinventory')->setLabel(___('Check Inventory?'));
