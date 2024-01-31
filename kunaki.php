@@ -229,7 +229,8 @@ class Am_Plugin_Kunaki extends Am_Plugin
         if (!$this->getConfig('debug') || !$message) {
             return;
         }
-        parent::logDebug($message);
+        $short = str_replace('Am_Plugin_', '', get_class($this));
+        $this->logger->info($short.': '.$message, ['class' => get_class($this)]);
     }
 
     public function getReadme()
