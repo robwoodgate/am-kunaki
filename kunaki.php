@@ -1,12 +1,13 @@
 <?php
 /**
- *  Kunaki v2.2
- *  Copyright 2012-2022 (c) R Woodgate
- *  All Rights Reserved
+ * Kunaki Plugin for aMember v6
+ * Author: R Woodgate, Cogmentis Ltd.
+ * Author URI: https://www.cogmentis.com/.
  *
  * ============================================================================
  * Revision History:
  * ----------------
+ * 2024-09-19   v3.0    R Woodgate  Change to MIT licence, release open source
  * 2022-06-14   v2.2    R Woodgate  PHP8 Compatibility update
  * 2021-04-10   v2.1    R Woodgate  Use DI->mail so defaults are populated
  * 2020-01-21   v2.0    R Woodgate  aMember v6 update (fixes email)
@@ -25,7 +26,7 @@
 class Am_Plugin_Kunaki extends Am_Plugin
 {
     public const PLUGIN_STATUS = self::STATUS_PRODUCTION;
-    public const PLUGIN_REVISION = '2.2';
+    public const PLUGIN_REVISION = '3.0';
     public const KUNAKI_URL = 'http://kunaki.com/XMLService.ASP';
     public const KUNAKI_SHIPPED = 'kunaki-shipped';
     public const KUNAKI_PRODUCTS = 'kunaki-products';
@@ -82,7 +83,7 @@ class Am_Plugin_Kunaki extends Am_Plugin
         $form = new Am_Form_Setup('kunaki');
         $form->setTitle("Kunaki");
 
-        $fs = $form->addFieldset()->setLabel(___('Kunaki Account <img src="https://www.cogmentis.com/lcimg/kunaki.jpg" />'));
+        $fs = $form->addFieldset()->setLabel(___('Kunaki Account'));
         $fs->addText('userid')->setLabel(___('Kunaki User ID'));
         $fs->addText('password', ['size' => 40])->setLabel(___('Kunaki Password'));
 
@@ -346,14 +347,14 @@ These instructions assume you have created your products at Kunaki already.
 
 -------------------------------------------------------------------------------
 
-Copyright 2012-2022 (c) Rob Woodgate, Cogmentis Ltd. All Rights Reserved
+Copyright 2012-2024 (c) Rob Woodgate, Cogmentis Ltd.
 
-This file may not be distributed unless permission is given by author.
+This plugin is provided under the MIT License.
 
 This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING
 WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-For support (to report bugs and request new features) visit: <a href="https://www.cogmentis.com/">www.cogmentis.com/</a>
+<strong>Like this plugin?</strong> <a href="https://donate.cogmentis.com" target="_blank">Buy me a coffee</a>
 
 -------------------------------------------------------------------------------'
 CUT;
